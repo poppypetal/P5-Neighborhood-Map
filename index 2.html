@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style type="text/css">
+
+    </style>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows"></script>
+<!--  <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: { lat: 39.73924, lng: -104.99025},
+          zoom: 10
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);s
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>-->
+</head>
+<body>
+<div class="container">
+<div class="row">
+      <div class="col-md-8">
+        <h1>Neighborhood Map</h1>
+      </div>
+      <div class="col-md-4">
+        <h6>Search Coffee Shops By Star Rating</h6>
+        <select name="select">
+  <option value="value5">5 Stars</option>
+  <option value="value4.9" selected>4.9 Stars</option>
+  <option value="value4.7" selected>4.7 Stars</option>
+  <option value="value4.6" selected>4.6 Stars</option>
+  <option value="value4.5" selected>4.5 Stars</option>
+  <option value="value4.4" selected>4.4 Stars</option>
+  <option value="value4.2" selected>4.2 Stars</option>
+  <option value="value4.0" selected>4.0 Stars</option>
+  <option value="value3.9" selected>3.9 Stars</option>
+  <option value="value3.8" selected>3.8 Stars</option>
+</select>
+    </div>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+        <div id="map-canvas"></div>
+    </div>
+  </div>
+
+  <div data-bind="template: 'locationsTemplate'"></div>
+
+  <script id="locationsTemplate" type="text/html">
+    <ul>
+      {{each(index, location) locations}}
+        <li>${ location.name }</li>
+      {{/each}}
+    </ul>
+  </script>
+    <script src="js/app.js"></script>
+    <script type='text/javascript' src='js/knockout-3.3.0.js'></script>
+  </body>
+  </html>

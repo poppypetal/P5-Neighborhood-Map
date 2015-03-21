@@ -1,0 +1,13 @@
+Resources:
+
+//Google Maps API
+https://developers.google.com/maps/documentation/javascript/tutorial
+https://developers.google.com/maps/documentation/javascript/examples/marker-simple
+https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
+
+//Google Map Longitude/Latitude Coordinate finder
+http://universimmedia.pagesperso-orange.fr/geo/loc.htm
+
+//select box dropdown
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+http://knockoutjs.com/documentation/selectedOptions-binding.html
