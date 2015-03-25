@@ -3,12 +3,12 @@
 function initialize() {
   var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
   var mapOptions = {
-     zoom: 12,
+     zoom: 11,
      center: myLatlng
     //center: { lat: 39.73924, lng: -104.99025},
     //zoom: 12
   }
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  var myMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
 //TODO figure out how to add in content from external api
 //adds an info window when the marker is clicked
   var contentString = '<div id="content">'+
@@ -35,20 +35,26 @@ function initialize() {
   var infowindow = new google.maps.InfoWindow({
       content: contentString
   });
-
-
-
-
-
   var marker = new google.maps.Marker({
       position: myLatlng,
-      map: map,
+      map: myMap,
       title: 'Denver'
   });
 //for info window to work
   google.maps.event.addListener(marker, 'click', function() {
-  infowindow.open(map,marker);
+  infowindow.open(myMap,marker);
 });
+    for(var i = 0; i < locations().length; i++) {
+        var latlong = new google.maps.LatLng(locations()[i].lat, locations()[i].lng);
+
+        var marker = new google.maps.Marker({
+        position: latlong,
+        map: myMap,
+        title: locations()[i].name
+        });
+    }
+
+
 }//close initialize function
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -60,94 +66,98 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 //Model//
 //define and list locations
-var locations = ko.observabaleArray([
-    {name: "The Bardo Coffee House",
-    street: "238 S. Broadway",
-    zip: "80209",
-    city: "Denver",
-    latlong: (39.712298, -104.987224),
-    stars: "4.7",
+var locations = ko.observableArray([
+  {name: "2914 Coffee",
+      street: "2914 W. 25th Ave",
+      zip: "80211",
+      city: "Denver",
+      lat: 39.753484,
+      lng: -105.024068,
+      stars: "4.6",
+  },
+  {name: "Crema Coffee House",
+      street: "2862 Larimer St",
+      zip: "80205",
+      city: "Denver",
+      lat: 39.761073,
+      lng: -104.981712,
+      stars: "4.5",
+  },
+  {name: "Dazbog Coffee",
+      street: "1201 E 9th Ave",
+      zip: "80218",
+      city: "Denver",
+      lat: 39.730534,
+      lng: -104.972666,
+      stars: "3.8",
+  },
+  {name: "Highlands Cork & Coffee",
+      street: "3701 W 32nd Ave",
+      zip: "80211",
+      city: "Denver",
+      lat: 39.762296,
+      lng: -105.035920,
+      stars: "4.1",
+  },
+  {name: "Metropolis Coffee",
+      street: "1 S Broadway",
+      zip: "80223",
+      city: "Denver",
+      lat: 39.716444,
+      lng: -104.987704,
+      stars: "4.4",
+  },
+  {name: "Peet's Coffe & Tea",
+      street: "2500 E 2nd Ave",
+      zip: "80206",
+      city: "Denver",
+      lat: 39.719163,
+      lng: -104.957035,
+      stars: "4.0",
+  },
+  {name: "Roostercat Coffee House",
+      street: "1045 Lincoln St",
+      zip: "80203",
+      city: "Denver",
+      lat: 39.732957,
+      lng: -104.986412,
+      stars: "5.0",
     },
-    {name: "Wash Perk",
-      street: "853 E. Ohio Ave",
+  {name: "Steam Espresso Bar",
+      street: "1801 S Pearl Street",
+      zip: "80210",
+      city: "Denver",
+      lat: 39.683850,
+      lng: -104.980778,
+      stars: "4.9",
+  },
+  {name: "Tenn Street Coffee",
+      street: "4418 Tennyson St",
+      zip: "80212",
+      city: "Denver",
+      lat: 39.776929,
+      lng: -105.043733,
+      stars: "3.9",
+  },
+  {name: "The Bardo Coffee House",
+      street: "238 S. Broadway",
       zip: "80209",
       city: "Denver",
-      latlong: (39.702267, -104.977069),
-      stars: "4.4",
-    },
-    {name: "2914 Coffee",
-        street: "2914 W. 25th Ave",
-        zip: "80211",
-        city: "Denver",
-        latlong: (39.753484, -105.024068),
-        stars: "4.6",
-    },
-    {name: "Dazbog Coffee",
-        street: "1201 E 9th Ave",
-        zip: "80218",
-        city: "Denver",
-        latlong: (39.730534, -104.972666),
-        stars: "3.8",
-    },
-    {name: "Roostercat Coffee House",
-        street: "1045 Lincoln St",
-        zip: "80203",
-        city: "Denver",
-        latlong: (39.732957, -104.986412),
-        stars: "5.0",
-    },
-    {name: "Crema Coffee House",
-        street: "2862 Larimer St",
-        zip: "80205",
-        city: "Denver",
-        latlong: (39.761073, -104.981712),
-        stars: "4.5",
-    },
-    {name: "Steam Espresso Bar",
-        street: "1801 S Pearl Street",
-        zip: "80210",
-        city: "Denver",
-        latlong: (39.683850, -104.980778),
-        stars: "4.9",
-    },
-    {name: "Peet's Coffe & Tea",
-        street: "2500 E 2nd Ave",
-        zip: "80206",
-        city: "Denver",
-        latlong: (39.719163, -104.957035),
-        stars: "4.0",
-    },
-    {name: "Metropolis Coffee",
-        street: "1 S Broadway",
-        zip: "80223",
-        city: "Denver",
-        latlong: (39.716444, -104.987704),
-        stars: "4.4",
-    },
-    {name: "Tenn Street Coffee",
-        street: "4418 Tennyson St",
-        zip: "80212",
-        city: "Denver",
-        //latlong: (39.776911, -105.043757),
-        lat: 39.702267,
-        lng: -104.977069,
-        stars: "3.9",
-    },
+      lat: 39.712298,
+      lng: -104.987224,
+      stars: "4.7",
+  },
+  {name: "Wash Perk",
+    street: "853 E. Ohio Ave",
+    zip: "80209",
+    city: "Denver",
+    lat: 39.702221,
+    lng: -104.977111,
+    stars: "4.4",
+  },
+
   ] //end observableArray//
 );
-
-for(var i = 0; i < locations.length; i++) {
-
-  var location = locations[i];
-  var latlong = new google.maps.LatLng(location.lat, location.lng);
-  var marker = new google.maps.Marker({
-    position: latlong,
-    map: map,
-    name: location.city
-  });
-
-}
-
 
 
 
@@ -162,9 +172,8 @@ for(var i = 0; i < locations.length; i++) {
 //suggested in http://discussions.udacity.com/t/any-guidance-on-coding-p5/3757/10
 function ViewModel() {
   var self = this;
-  var inputName = ko.observable(input);
 }
-
+// Activates knockout.js
 ko.applyBindings( new ViewModel() );
 
 
@@ -175,7 +184,10 @@ ko.applyBindings( new ViewModel() );
 /*like if (text_matches && star_rate_filter_matches) { //Show the marker }
 ea to hide a marker
 
-Udacity Coach: you get the marker's reference
+if(locations().stars && ){marker.setMap(map)}
+else{marker.setMap(Null)};
+
+
 
 Udacity Coach: and use marker.setMap(map); to show
 
