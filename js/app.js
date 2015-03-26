@@ -11,7 +11,9 @@ function initialize() {
   var myMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
 //TODO figure out how to add in content from external api
 //adds an info window when the marker is clicked
-  var contentString = '<div id="content">'+
+//info window structure taken from https://developers.google.com/maps/documentation/javascript/infowindows
+/*
+  var contentString = /*'<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
       '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
@@ -30,7 +32,8 @@ function initialize() {
       'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
       '(last visited June 22, 2009).</p>'+
       '</div>'+
-      '</div>';
+      '</div>'*/
+/*      'https://maps.googleapis.com/maps/api/streetview?size=400x400&location=' + 'latlong';
 
   var infowindow = new google.maps.InfoWindow({
       content: contentString
@@ -40,29 +43,44 @@ function initialize() {
       map: myMap,
       title: 'Denver'
   });
-//for info window to work
+//for info window to work, via GoogleMaps infowindows page
   google.maps.event.addListener(marker, 'click', function() {
   infowindow.open(myMap,marker);
-});
+});*/
+
+//To display individual location markers
     for(var i = 0; i < locations().length; i++) {
         var latlong = new google.maps.LatLng(locations()[i].lat, locations()[i].lng);
-
+        var contentString = 'locations()[i].name';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        console.log(infowindow);
         var marker = new google.maps.Marker({
         position: latlong,
+        animation: google.maps.Animation.DROP,
         map: myMap,
-        title: locations()[i].name
+        title: locations()[i].name,
         });
+        google.maps.event.addListener(marker, 'click', toggleBounce);
+        google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(myMap, marker);
+      });
+    }
+    function toggleBounce() {
+
+      if (marker.getAnimation() != null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
     }
 
-
 }//close initialize function
-
+//from https://developers.google.com/maps/documentation/javascript/tutorial
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
-//function markers(){
-//  for location.
-//}
 
 //Model//
 //define and list locations
@@ -159,14 +177,6 @@ var locations = ko.observableArray([
   ] //end observableArray//
 );
 
-
-
-
-
-
-//suggestions given in http://discussions.udacity.com/t/any-guidance-on-coding-p5/3757/10
-
-//var INFO_WINDOW = new google.maps.InfoWindow();
 
 //View//
 //suggested in http://discussions.udacity.com/t/any-guidance-on-coding-p5/3757/10
