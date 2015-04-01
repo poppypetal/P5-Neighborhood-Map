@@ -9,98 +9,63 @@ function initialize() {
     //zoom: 12
   }
   var myMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
+
 //TODO figure out how to add in content from external api
 //adds an info window when the marker is clicked
 //info window structure taken from https://developers.google.com/maps/documentation/javascript/infowindows
-/*
-  var contentString = /*'<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-      '<div id="bodyContent">'+
-      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-      'sandstone rock formation in the southern part of the '+
-      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-      'south west of the nearest large town, Alice Springs; 450&#160;km '+
-      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-      'Aboriginal people of the area. It has many springs, waterholes, '+
-      'rock caves and ancient paintings. Uluru is listed as a World '+
-      'Heritage Site.</p>'+
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-      '(last visited June 22, 2009).</p>'+
-      '</div>'+
-      '</div>'*/
-/*      'https://maps.googleapis.com/maps/api/streetview?size=400x400&location=' + 'latlong';
 
-  var infowindow = new google.maps.InfoWindow({
-      content: contentString
-  });
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: myMap,
-      title: 'Denver'
-  });
-//for info window to work, via GoogleMaps infowindows page
-  google.maps.event.addListener(marker, 'click', function() {
-  infowindow.open(myMap,marker);
-});*/
-//var markers = ko.observableArray()
-//var infowindows = ko.observableArray()
-//var marker = []
-//To display individual location markers
+
+//To display individual location markers and infowindow content
+//function setMarkers(map, locations){}
 var infoWindow = new google.maps.InfoWindow();
     for(var i = 0; i < locations().length; i++) {
 
       var latlong = new google.maps.LatLng(locations()[i].lat, locations()[i].lng);
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + locations()[i].name + '</h1>' +      locations()[i].stars + ' ' + 'Stars' + locations()[i].url+ '<a href="https://maps.googleapis.com/maps/api/streetview?size=400x400&location= + locations()[i].lat,locations()[i].lng + &key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows">' + 'Street View </a>';
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + locations()[i].name + '</h1>' + locations()[i].stars + ' ' + 'Stars' + locations()[i].url + '<a href="' + locations()[i].url + '">' + 'Street View </a>' + '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+      '(last visited June 22, 2009).</p>';
 
-
-        var marker = new google.maps.Marker({
-          position: latlong,
-          animation: google.maps.Animation.DROP,
-          map: myMap,
-
+      var marker = new google.maps.Marker({
+        position: latlong,
+        animation: google.maps.Animation.DROP,
+        map: myMap,
         title: locations()[i].name,
         url: locations()[i].url,
+      });
 
-        });
-        marker.content = contents
-        //console.log(content)
-        //google.maps.event.addListener(marker, 'click', toggleBounce);
-        /*google.maps.event.addListener(marker, 'click', (function(marker, content, infowindow) {
-          return function() {
+        marker.content = contents ;//tells the marker which content to display for infowindow
 
 
-              infowindow.setContent(content);
-              infowindow.open(myMap,marker);
+            function toggleBounce () {
+                if (marker.getAnimation() != null) {
+                    marker.setAnimation(null);
+                } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                }
             };
-          })(marker,content,infowindow));
-        //infowindow.open(myMap,marker)});
-        //markers.push(marker);*/
+
 
         google.maps.event.addListener(marker, 'click', (function(marker) {
           return function(){
-          //var content = contents;
+            toggleBounce();
           infoWindow.setContent(marker.content);
           infoWindow.open(myMap, this);
         }
       })(marker));
-            //google.maps.event.addListener(marker, "click", function() {
-          //   location.assign(marker.url)});//upon second click on marker, the streetview location opens in a new window
-            //  });
-        //});
+        //    google.maps.event.addListener(marker, "click", function() {
+        //     location.assign(marker.url)});//upon second click on marker, the streetview location opens in a new window
+        //      });
+      //  });
 
     }//close for loop
-    /*function toggleBounce() {
+/*    google.maps.event.addListener(marker, 'click', toggleBounce);
+    function toggleBounce() {
 
-      if (markers().getAnimation() != null) {
-        markers().setAnimation(null);
+      if (marker().getAnimation() != null) {
+        marker().setAnimation(null);
       }
       else {
-        markers().setAnimation(google.maps.Animation.BOUNCE);
+        marker().setAnimation(google.maps.Animation.BOUNCE);
       }
     };*/
 
