@@ -1,66 +1,97 @@
 //Google Map//
+var bouncingMarker = null;
 //ViewModel// what the user sees //view is
 function initialize() {
-  var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
-  var mapOptions = {
-     zoom: 11,
-     center: myLatlng
-    //center: { lat: 39.73924, lng: -104.99025},
-    //zoom: 12
-  }
-  var myMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
+    var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
+    var mapOptions = {
+       zoom: 11,
+       center: myLatlng
+      //center: { lat: 39.73924, lng: -104.99025},
+      //zoom: 12
+    }
 
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
+
+    setMarkers(map, locations);
+  }//close initialize function
 //TODO figure out how to add in content from external api
 //adds an info window when the marker is clicked
 //info window structure taken from https://developers.google.com/maps/documentation/javascript/infowindows
 
 
 //To display individual location markers and infowindow content
-//function setMarkers(map, locations){}
 var infoWindow = new google.maps.InfoWindow();
+function setMarkers(map, locations){
     for(var i = 0; i < locations().length; i++) {
-
       var latlong = new google.maps.LatLng(locations()[i].lat, locations()[i].lng);
       var contents = '<h3 id="firstHeading" class="firstHeading">' + locations()[i].name + '</h1>' + locations()[i].stars + ' ' + 'Stars' + '<a href="' + locations()[i].url + '">' + 'Street View </a>';
-
 //TODO add error handling for streetview
-
       var marker = new google.maps.Marker({
         position: latlong,
         animation: google.maps.Animation.DROP,
-        map: myMap,
+        map: map,
         title: locations()[i].name,
         url: locations()[i].url,
       });
+/*      google.maps.event.addListener(marker, 'click', toggleBounce);
+//}
+
+function toggleBounce() {
+
+if (marker.getAnimation() != null) {
+  marker.setAnimation(null);
+} else {
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+}
+};*/
+
+var clickListener = function() {
+    if(bouncingMarker)
+        bouncingMarker.setAnimation(null);
+    if(bouncingMarker != this) {
+        this.setAnimation(google.maps.Animation.BOUNCE);
+        bouncingMarker = this;
+    } else
+        bouncingMarker = null;
+}
+
+
 
         marker.content = contents ;//tells the marker which content to display for infowindow
-//        google.maps.event.addListener(marker, 'click', toggleBounce);
-//        google.maps.event.addListener(self.marker, 'click', toggleBounce);
-
-        function toggleBounce () {
-          if (marker.getAnimation() != null) {
-              marker.setAnimation(null);
-          } else {
-              marker.setAnimation(google.maps.Animation.BOUNCE);
-          }
-        };
-
+        google.maps.event.addListener(marker, 'click', clickListener);
         google.maps.event.addListener(marker, 'click', (function(marker) {
           return function(){
-            toggleBounce();
+          //  toggleBounce();
           infoWindow.setContent(marker.content);
-          infoWindow.open(myMap, this);
+          infoWindow.open(map, this);
+
         }
       })(marker));
 
     }//close for loop
-}//close initialize function
+  }//close set marker function
+//}//close initialize function
 
 //TODO create function setMarkers with for loop ousitde initialize function
 http://stackoverflow.com/questions/11106671/google-maps-api-multiple-markers-with-infowindows
 
 //from https://developers.google.com/maps/documentation/javascript/tutorial
 google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+//TODO add in togglebounce
+//        google.maps.event.addListener(marker, 'click', toggleBounce);
+//        google.maps.event.addListener(self.marker, 'click', toggleBounce);
+
+/*        function toggleBounce (marker) {
+          if (marker.getAnimation() != null) {
+              marker.setAnimation(null);
+          } else {
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+          }
+        };*/
 
 
 
