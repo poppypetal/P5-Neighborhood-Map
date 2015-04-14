@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style type="text/css">
-
-    </style>
+  </style>
+  <script src='js/jquery-1.11.1.min.js'></script>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows"></script>
 <!--  <script type="text/javascript">
       function initialize() {
@@ -25,41 +24,46 @@
 <body>
 <div class="container">
 <div class="row">
-      <div class="col-md-8">
-        <h1>Neighborhood Map</h1>
-      </div>
-      <div class="col-md-4">
-        <h6>Search Coffee Shops By Star Rating</h6>
-        <select name="select">
-  <option value="value5">5 Stars</option>
-  <option value="value4.9" selected>4.9 Stars</option>
-  <option value="value4.7" selected>4.7 Stars</option>
-  <option value="value4.6" selected>4.6 Stars</option>
-  <option value="value4.5" selected>4.5 Stars</option>
-  <option value="value4.4" selected>4.4 Stars</option>
-  <option value="value4.2" selected>4.2 Stars</option>
-  <option value="value4.1" selected>4.1 Stars</option>
-  <option value="value4.0" selected>4.0 Stars</option>
-  <option value="value3.9" selected>3.9 Stars</option>
-  <option value="value3.8" selected>3.8 Stars</option>
-</select>
+  <div class="col-md-4" id="select">
+    <h6>Search Coffee Shops By Star Rating</h6>
+    <!--<a href="https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.732957,-104.986412&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows">Test</a>-->
+      <select name="select">
+        <option value="5" selected>5 Stars</option>
+        <option value="4.9">4.9 Stars</option>
+        <option value="4.7">4.7 Stars</option>
+        <option value="4.6">4.6 Stars</option>
+        <option value="4.5">4.5 Stars</option>
+        <option value="4.4">4.4 Stars</option>
+        <option value="4.2">4.2 Stars</option>
+        <option value="4.1">4.1 Stars</option>
+        <option value="4.0">4.0 Stars</option>
+        <option value="3.9">3.9 Stars</option>
+        <option value="3.8">3.8 Stars</option>
+      </select>
+    </div>
+    <div class="col-md-8">
+      <h1>Neighborhood Map</h1>
     </div>
 </div>
   <div class="row">
-      <div class="col-md-12">
+    <div class="col-md-2">
+    <div class="list">
+      <h3>Denver Coffee Shops</h3>
+      <ul data-bind="foreach: { data: locations, as: 'location' } visible: location.show">
+        <li data-bind="text: location.name"></li>
+      </ul>
+    </div>
+  </div>
+      <div class="col-md-10">
         <div id="map-canvas"></div>
     </div>
   </div>
 
-<div class="list">
-  <h3>Denver Coffee Shops</h3>
-  <ul data-bind="foreach: { data: locations, as: 'location' }">
-    <li data-bind="text: location.name"></li>
-  </ul>
-</div>
+
 
 
     <script type='text/javascript' src='js/knockout-3.3.0.js'></script>
+
     <script src="js/app.js"></script>
   </body>
   </html>
