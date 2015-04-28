@@ -27,8 +27,8 @@
   <div class="col-md-4" id="select">
     <h6>Search Coffee Shops By Star Rating</h6>
     <!--<a href="https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.732957,-104.986412&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows">Test</a>-->
-      <select name="select">
-        <option value="5" selected>5 Stars</option>
+      <select name="select" id="ratings">
+        <option value="5">5 Stars</option>
         <option value="4.9">4.9 Stars</option>
         <option value="4.7">4.7 Stars</option>
         <option value="4.6">4.6 Stars</option>
@@ -49,8 +49,8 @@
     <div class="col-md-2">
     <div class="list">
       <h3>Denver Coffee Shops</h3>
-      <ul data-bind="foreach: { data: locations, as: 'location' } visible: location.show">
-        <li data-bind="text: location.name"></li>
+      <ul data-bind="foreach: { data: locations, as: 'location' } ">
+        <li data-bind="text: location.name, visible: location.show"></li>
       </ul>
     </div>
   </div>
