@@ -4,6 +4,14 @@ Resources:
 https://developers.google.com/maps/documentation/javascript/tutorial
 https://developers.google.com/maps/documentation/javascript/examples/marker-simple
 https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
+https://developers.google.com/maps/documentation/javascript/examples/marker-animations
+http://stackoverflow.com/questions/12727840/google-maps-api-v3-active-marker-onclick
+http://stackoverflow.com/questions/18436599/animating-different-markers-api-v3-google-maps
+https://developers.google.com/maps/documentation/streetview/
+http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/
+http://stackoverflow.com/questions/8247626/bouncing-marker
+http://stackoverflow.com/questions/14657779/google-maps-bounce-animation-on-marker-for-a-limited-period
+
 
 //Google Map Longitude/Latitude Coordinate finder
 http://universimmedia.pagesperso-orange.fr/geo/loc.htm
@@ -11,3 +19,9 @@ http://universimmedia.pagesperso-orange.fr/geo/loc.htm
 //select box dropdown
 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
 http://knockoutjs.com/documentation/selectedOptions-binding.html
+https://api.jquery.com/toggle-event/
+
+
+https://maps.googleapis.com/maps/api/streetview?size=400x400&location= + 'lat','lng' + &key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows
+
+https://maps.googleapis.com/maps/api/streetview?size=400x400&location= + 'lat','lng' + &key=MyAPIKEY
