@@ -10,7 +10,9 @@ var viewModel = {
       lng: -105.024068,
       stars: 4.6,
       show: ko.observable(true),
+      //marker: "",
       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.753484,-105.024068&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
+
   },
   {name: "Crema Coffee House",
       street: "2862 Larimer St",
@@ -146,6 +148,27 @@ var bouncingMarker = null; //global variable setting initial bounce of marker to
 //adds an info window when the marker is clicked
 //info window structure taken from https://developers.google.com/maps/documentation/javascript/infowindows
 
+/*var fsLink = "https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
+var venue = ""
+
+console.log(fsLink);
+
+
+$.ajax({
+    url: fsLink,
+    dataType: "jsonp",
+    success: function(response){
+        venue = response[1];
+        console.log(fsLink);
+    }
+});*/
+/*Pseudocode
+
+create link that gets the location telephone number and location hours and have that information displayed in the info window and/or as results when clicking on the locaation link.
+*/
+//create a new marker array
+//var location.marker = "";
+
 
 //To display individual location markers and infowindow content
 var infoWindow = new google.maps.InfoWindow();
@@ -153,7 +176,25 @@ function setMarkers(map, locations){
   locations.forEach(function(location, index){
     if (location.show()){
       var latlong = new google.maps.LatLng(location.lat, location.lng);
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +    location.stars + ' ' + 'Stars' + '<a href="' + location.url + '">' + 'Street View </a>';
+
+      //foursquare api
+      var fsLink = "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=C0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll=40.7,-74&query=sushi";
+    //  //"https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
+var venue = "";
+$.ajax({
+url: fsLink,
+dataType: "jsonp",
+success: function(response){
+  console.log(response);
+venue = response[1];
+}
+});
+
+
+
+  //infowindow content
+
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +    location.stars + ' ' + 'Stars' + '<a href="' + location.url + '">' + 'Street View </a>' + venue.contact.phone;
       //TODO add error handling for streetview
       //console.log(location)
       var marker = new google.maps.Marker({
@@ -163,8 +204,9 @@ function setMarkers(map, locations){
         title: location.name,
         url: location.url,
         });
-
+    //    location.marker = marker;
       google.maps.event.addListener(marker, 'click', toggleBounce);
+
       function toggleBounce() {
         if (marker.getAnimation() != null) {
           marker.setAnimation(null);
@@ -172,8 +214,8 @@ function setMarkers(map, locations){
         else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
           setTimeout(function() {
-        marker.setAnimation(null)
-    }, 3000);
+            marker.setAnimation(null)
+            }, 3000);
         }
       };
     var clickListener = function() { //add clicklistner function to address if marker is bouncing or not
@@ -185,6 +227,7 @@ function setMarkers(map, locations){
         } else
             bouncingMarker = null;
     }
+
             marker.content = contents ;//tells the marker which content to display for infowindow
             google.maps.event.addListener(marker, 'click', clickListener); //for togglebounce
             google.maps.event.addListener(marker, 'click', (function(marker) {
@@ -194,6 +237,7 @@ function setMarkers(map, locations){
               infoWindow.open(map, this);
             }
           })(marker));
+
     };
   });
 };
@@ -220,37 +264,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
     })
 
 });
-console.log($('select option:selected').val());*/
-/*var viewModel = {
-	        places: ko.observableArray([
-	        	{
-					name : 'place 1',
-					rating : '4',
-					show : ko.observable(true)
-				},
-				{
-					name : 'place 2',
-					rating : '2',
-					show : ko.observable(true)
-				},
-				{
-					name : 'place 3',
-					rating : '2',
-					show : ko.observable(true)
-				},
-				{
-					name: 'place 4',
-					rating : '3',
-					show : ko.observable(true)
-				},
-				{
-					name : 'place 5',
-					rating : '3',
-					show : ko.observable(true)
-				}
-	        ])
-	    };
-*/
+
 
 
 $("#ratings").change(function(){
@@ -267,30 +281,39 @@ $("#ratings").change(function(){
 });
 
 
-ko.applyBindings(viewModel);
+//ko.applyBindings(viewModel);
 
 
 
 
 //}
 
-
-
-
-
-
-
-
-
-
-
-
 //View//
 function ViewModel() {
   var self = this;
 }
 // Activates knockout.js
-ko.applyBindings( new viewModel() );
+ko.applyBindings(viewModel);
+
+
+
+/*var fsURL = "https://api.foursquare.com/v2/venues/search?near=zurich&section=drinks&oauth_token=NOFWGL5PTP4HRY3W1IODQGUKIAG1GA5BV2AOBVGGLJGV0HF4&v=20150318"
+
+$.ajax({
+    url: fsURL,
+    dataType: "json",
+    success: function(response){
+        var venue = response[1];
+        console.log(venue);
+    }
+});*/
+
+
+
+
+
+
+
 
 
 
