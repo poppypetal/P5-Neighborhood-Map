@@ -1,4 +1,5 @@
-//Model//data for application
+//Model
+//data for application
 //define and list locations
 var viewModel = {
  locations : ko.observableArray([
@@ -114,13 +115,14 @@ var viewModel = {
     show: ko.observable(true),
     url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.702221,-104.977111&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows"
   },
-  ] //end observableArray//
+  ] //end observableArray
 )
 };
-
+//global venue variable
+//ViewModel// what the user sees
 //Google Map//
 var bouncingMarker = null; //global variable setting initial bounce of marker to null--for togglebounce functionality
-//ViewModel// what the user sees //view is
+
 //function initialize() {
 
     var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
@@ -131,43 +133,18 @@ var bouncingMarker = null; //global variable setting initial bounce of marker to
       //zoom: 12
     }
 
-    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//creates map
     function initialize() {
       var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
       var mapOptions = {
          zoom: 11,
          center: myLatlng
-        //center: { lat: 39.73924, lng: -104.99025},
-        //zoom: 12
       }
 
       var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
       setMarkers(map, viewModel.locations());
   };//close initialize function
-//TODO figure out how to add in content from external api
-//adds an info window when the marker is clicked
-//info window structure taken from https://developers.google.com/maps/documentation/javascript/infowindows
 
-/*var fsLink = "https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
-var venue = ""
-
-console.log(fsLink);
-
-
-$.ajax({
-    url: fsLink,
-    dataType: "jsonp",
-    success: function(response){
-        venue = response[1];
-        console.log(fsLink);
-    }
-});*/
-/*Pseudocode
-
-create link that gets the location telephone number and location hours and have that information displayed in the info window and/or as results when clicking on the locaation link.
-*/
-//create a new marker array
-//var location.marker = "";
 
 
 //To display individual location markers and infowindow content
@@ -176,27 +153,26 @@ function setMarkers(map, locations){
   locations.forEach(function(location, index){
     if (location.show()){
       var latlong = new google.maps.LatLng(location.lat, location.lng);
-
-      //foursquare api
-      var fsLink = "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=C0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll=40.7,-74&query=sushi";
-    //  //"https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
-var venue = "";
+//foursquare api url
+      var fsLink =
+      "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
+      var venues = "";
 $.ajax({
 url: fsLink,
 dataType: "jsonp",
-success: function(response){
-  console.log(response);
-venue = response[1];
+success: function(response)
+
+{
+//venue = response[1];
+venues = response.response.venues[0];
+//console.log(response.response.venues[0].contact.formattedPhone);
 }
+
 });
-
-
-
   //infowindow content
 
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +    location.stars + ' ' + 'Stars' + '<a href="' + location.url + '">' + 'Street View </a>' + venue.contact.phone;
-      //TODO add error handling for streetview
-      //console.log(location)
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +    location.stars + ' ' + 'Stars' + '<a href="' + location.url + '">' + 'Street View </a>';
+
       var marker = new google.maps.Marker({
         position: latlong,
         animation: google.maps.Animation.DROP,
@@ -241,32 +217,12 @@ venue = response[1];
     };
   });
 };
-
     //close for loop
   //close set marker function
 //}//close initialize function
 
-//TODO create function setMarkers with for loop ousitde initialize function
-http://stackoverflow.com/questions/11106671/google-maps-api-multiple-markers-with-infowindows
-
-//TODO create map load error handling, streetview error handling
-
-//from https://developers.google.com/maps/documentation/javascript/tutorial
 google.maps.event.addDomListener(window, 'load', initialize);
-
-/*$('test').toggle(function(){
-  ko.utils.arrayForEach(locations(), function(location) {
-  for  (location in locations)
-    if (location.stars === $('select option:selected').val()){
-        location.show = true}
-      //if (location.stars === document.getElementsByTagName('option')[i].value){
-    else {location.show = false};
-    })
-
-});
-
-
-
+//function to update locations list and map markers based on selected star value from select box--search functionality
 $("#ratings").change(function(){
   var val = $("#ratings").val()
   viewModel.locations().forEach(function(location, index){
@@ -279,6 +235,35 @@ $("#ratings").change(function(){
   });
   initialize()
 });
+
+
+//Functions, ajax & error handeling to display & append foursquare info to locations list
+var $locInfo = $('location-info');
+
+var fsLink = "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
+var venues = "";
+var locInfoRequestTimeout = setTimeout(function(){
+  $locInfo.text("failed to get Foursquare resources");
+}, 8000);
+console.log(fsLink);
+$.ajax({
+  url: fsLink,
+  dataType: "jsonp",
+  //jsonp: "callback",
+  success: function( response ){
+    for (var i = 0; i < venues.length; i++) {
+      venues = response.response.venues[0];
+      $locInfo.append(venues.contact.formattedPhone);
+      console.log(venues.contact.formattedPhone);
+  };
+
+    clearTimeout(locInfoRequestTimeout);
+  }
+});
+
+
+
+
 
 
 //ko.applyBindings(viewModel);
@@ -297,22 +282,37 @@ ko.applyBindings(viewModel);
 
 
 
-/*var fsURL = "https://api.foursquare.com/v2/venues/search?near=zurich&section=drinks&oauth_token=NOFWGL5PTP4HRY3W1IODQGUKIAG1GA5BV2AOBVGGLJGV0HF4&v=20150318"
+
+
+
+//Ignore all code below---need to delete before submission
+
+
+
+//TODO figure out how to add in content from external api
+//adds an info window when the marker is clicked
+//info window structure taken from
+
+/*var fsLink = "https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
+var venue = ""
+
+console.log(fsLink);
+
 
 $.ajax({
-    url: fsURL,
-    dataType: "json",
+    url: fsLink,
+    dataType: "jsonp",
     success: function(response){
-        var venue = response[1];
-        console.log(venue);
+        venue = response[1];
+        console.log(fsLink);
     }
 });*/
+/*Pseudocode
 
-
-
-
-
-
+create link that gets the location telephone number and location hours and have that information displayed in the info window and/or as results when clicking on the locaation link.
+*/
+//create a new marker array
+//var location.marker = "";
 
 
 
