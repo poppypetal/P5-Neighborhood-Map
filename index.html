@@ -50,7 +50,9 @@
     <div class="list">
       <h3>Denver Coffee Shops</h3>
       <ul data-bind="foreach: { data: locations, as: 'location' } ">
-        <li data-bind="text: location.name, visible: location.show"></li>
+      <!--  <li><a href="http://www.google.com" data-bind="text: location.name, visible: location.show"></a></li>-->
+
+      <li id="location-info" data-bind="text: location.name, visible: location.show"></li>
         <!--<li><a  data-bind="text: location.name, visible: location.show, click: location.marker.toggleBounce()"></a></li>-->
       </ul>
     </div>
