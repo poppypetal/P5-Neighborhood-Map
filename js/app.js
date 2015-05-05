@@ -152,27 +152,33 @@ var infoWindow = new google.maps.InfoWindow();
 function setMarkers(map, locations){
   locations.forEach(function(location, index){
     if (location.show()){
+      //infowindow content
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>'
+      ;
+      //foursquare api url
+            var fsLink =
+            "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
       var latlong = new google.maps.LatLng(location.lat, location.lng);
-//foursquare api url
-      var fsLink =
-      "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
+
       var venues = "";
-$.ajax({
-url: fsLink,
-dataType: "jsonp",
-success: function(response)
+      $.ajax({
+      url: fsLink,
+      dataType: "jsonp",
+      success: function(response)
 
-{
-//venue = response[1];
-venues = response.response.venues[0];
-//console.log(response.response.venues[0].contact.formattedPhone);
-}
+      {
+      //venue = response[1];
+      venues = response.response.venues[0];
+      contents = contents + venues.contact.formattedPhone;
+      //console.log(response.response.venues[0].contact.formattedPhone);
+      }
 
-});
+      }); 
   //infowindow content
-
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +    location.stars + ' ' + 'Stars' + '<a href="' + location.url + '">' + 'Street View </a>';
-
+/*
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>'
+      ;
+*/
       var marker = new google.maps.Marker({
         position: latlong,
         animation: google.maps.Animation.DROP,
@@ -204,12 +210,12 @@ venues = response.response.venues[0];
             bouncingMarker = null;
     }
 
-            marker.content = contents ;//tells the marker which content to display for infowindow
+          //  marker.content = contents ;//tells the marker which content to display for infowindow
             google.maps.event.addListener(marker, 'click', clickListener); //for togglebounce
             google.maps.event.addListener(marker, 'click', (function(marker) {
               return function(){
               //  toggleBounce();
-              infoWindow.setContent(marker.content);
+              infoWindow.setContent(contents);//(marker.content);
               infoWindow.open(map, this);
             }
           })(marker));
@@ -236,7 +242,7 @@ $("#ratings").change(function(){
   initialize()
 });
 
-
+/*
 //Functions, ajax & error handeling to display & append foursquare info to locations list
 var $locInfo = $('location-info');
 
@@ -259,7 +265,7 @@ $.ajax({
 
     clearTimeout(locInfoRequestTimeout);
   }
-});
+});*/
 
 
 
