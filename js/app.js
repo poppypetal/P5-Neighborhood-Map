@@ -13,7 +13,6 @@ var viewModel = {
       show: ko.observable(true),
       //marker: "",
       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.753484,-105.024068&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
-
   },
   {name: "Dazbog Coffee",
       street: "1201 E 9th Ave",
@@ -119,66 +118,52 @@ var viewModel = {
 )
 };
 
-
-//ViewModel// what the user sees
-//Google Map//
+//ViewModel
+// what the user sees
+//define global variables
+//Google Map
 var bouncingMarker = null; //global variable setting initial bounce of marker to null--for togglebounce functionality
 
 function initialize() {
-
     var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
     var mapOptions = {
        zoom: 11,
        center: myLatlng
-      //center: { lat: 39.73924, lng: -104.99025},
-      //zoom: 12
-    }
-
-/*    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//creates map
-    function initialize() {
-      var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
-      var mapOptions = {
-         zoom: 11,
-         center: myLatlng
-      }
-*/
-      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
+    };
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//creates map
       setMarkers(map, viewModel.locations());
-      };//close initialize function
+}//close initialize function
 
 
 
-//To display individual location markers and infowindow content
+
+//Functions and variables used to display individual location markers and infowindow content
 var infoWindow = new google.maps.InfoWindow();
 function setMarkers(map, locations){
   locations.forEach(function(location, index){
     if (location.show()){
       //infowindow content
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>'
-      ;
+      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>';
       //foursquare api url
-            var fsLink =
-            "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
+      var fsLink =
+      "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
       var latlong = new google.maps.LatLng(location.lat, location.lng);
 
       var venues = "";
+      //ajax call to display foursquare api & includes error handling
       $.ajax({
         url: fsLink,
         dataType: "jsonp",
       success: function(response){
         venues = response.response.venues[0];
-        contents = contents + "Call:" + " " + venues.contact.formattedPhone;
+        contents = contents + "Foursquare Phone:" + " " + venues.contact.formattedPhone;
         },
       error: function(jqXHR, status, error){
        contents = contents + "Sorry, we cannot find a phone number for" + " " + location.name +" " + "at this time.";
-     }
-   });//close .ajax
+       }
+     });//close .ajax
 
-  //infowindow content
-/*
-      var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>'
-      ;
-*/
+      //create our map markers
       var marker = new google.maps.Marker({
         position: latlong,
         animation: google.maps.Animation.DROP,
@@ -186,20 +171,22 @@ function setMarkers(map, locations){
         title: location.name,
         url: location.url,
         });
-    //    location.marker = marker;
-      google.maps.event.addListener(marker, 'click', toggleBounce);
 
+
+      //set toggleBounce function
+      google.maps.event.addListener(marker, 'click', toggleBounce);
       function toggleBounce() {
-        if (marker.getAnimation() != null) {
+        if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         }
         else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
           setTimeout(function() {
-            marker.setAnimation(null)
+            marker.setAnimation(null);
             }, 3000);
         }
-      };//close toggleBounce function
+      }//close toggleBounce function
+
     var clickListener = function() { //add clicklistner function to address if marker is bouncing or not
         if(bouncingMarker)
             bouncingMarker.setAnimation(null);
@@ -208,73 +195,36 @@ function setMarkers(map, locations){
             bouncingMarker = this;
         } else
             bouncingMarker = null;
-    }//close clickListener function
+    };//close clickListener function
 
-          //  marker.content = contents ;//tells the marker which content to display for infowindow
-            google.maps.event.addListener(marker, 'click', clickListener); //for togglebounce
-            google.maps.event.addListener(marker, 'click', (function(marker) {
-              return function(){
-              //  toggleBounce();
-              infoWindow.setContent(contents);//(marker.content);
-              infoWindow.open(map, this);
-            }
-          })(marker));
 
-    };//close if statement in setMarkers function
+    google.maps.event.addListener(marker, 'click', clickListener); //for togglebounce
+    google.maps.event.addListener(marker, 'click', (function(marker) {
+        return function(){
+          infoWindow.setContent(contents);
+          infoWindow.open(map, this);
+          };
+        })(marker));
+
+    }//close if statement in setMarkers function
   });//close locations.forEach function
-};//close setMarker function
+}//close setMarker function
 
 google.maps.event.addDomListener(window, 'load', initialize);
 //function to update locations list and map markers based on selected star value from select box--search functionality
 $("#ratings").change(function(){
-  var val = $("#ratings").val()
+  var val = $("#ratings").val();
   viewModel.locations().forEach(function(location, index){
     if (location.stars==val){
-      location.show(true)
+      location.show(true);
     }
     else{
-      location.show(false)
+      location.show(false);
     }
   });
-  initialize()
+  initialize();
 });
 
-/*
-//Functions, ajax & error handeling to display & append foursquare info to locations list
-var $locInfo = $('location-info');
-
-var fsLink = "https://api.foursquare.com/v2/venues/search?client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=20130815&ll="+ location.lat + "," + location.lng + "&query=" + location.name;
-var venues = "";
-var locInfoRequestTimeout = setTimeout(function(){
-  $locInfo.text("failed to get Foursquare resources");
-}, 8000);
-console.log(fsLink);
-$.ajax({
-  url: fsLink,
-  dataType: "jsonp",
-  //jsonp: "callback",
-  success: function( response ){
-    for (var i = 0; i < venues.length; i++) {
-      venues = response.response.venues[0];
-      $locInfo.append(venues.contact.formattedPhone);
-      console.log(venues.contact.formattedPhone);
-  };
-
-    clearTimeout(locInfoRequestTimeout);
-  }
-});*/
-
-
-
-
-
-
-//ko.applyBindings(viewModel);
-
-
-
-
-//}
 
 //View//
 function ViewModel() {
@@ -282,82 +232,3 @@ function ViewModel() {
 }
 // Activates knockout.js
 ko.applyBindings(viewModel);
-
-
-
-
-
-
-//Ignore all code below---need to delete before submission
-
-
-
-//TODO figure out how to add in content from external api
-//adds an info window when the marker is clicked
-//info window structure taken from
-
-/*var fsLink = "https://api.foursquare.com/v2/venues/search?ll="+location.lat+","+location.lng;
-var venue = ""
-
-console.log(fsLink);
-
-
-$.ajax({
-    url: fsLink,
-    dataType: "jsonp",
-    success: function(response){
-        venue = response[1];
-        console.log(fsLink);
-    }
-});*/
-/*Pseudocode
-
-create link that gets the location telephone number and location hours and have that information displayed in the info window and/or as results when clicking on the locaation link.
-*/
-//create a new marker array
-//var location.marker = "";
-
-
-
-
-
-//Search Box//
-
-//like if (text_matches && star_rate_filter_matches) { //Show the marker }
-//ea to hide a marker
-
-//if(locations().stars && ){marker.setMap(map)}
-//else{marker.setMap(Null)};
-
-
-//Additional API//
-
-
-
-//additional functions:
-
-/*    google.maps.event.addListener(marker, 'click', toggleBounce);
-    function toggleBounce() {
-
-      if (marker().getAnimation() != null) {
-        marker().setAnimation(null);
-      }
-      else {
-        marker().setAnimation(google.maps.Animation.BOUNCE);
-      }
-    };*/
-
-    //    google.maps.event.addListener(marker, "click", function() {
-    //     location.assign(marker.url)});//upon second click on marker, the streetview location opens in a new window
-    //      });
-  //  });
-  /*https://api.foursquare.com/v2/venues/search?ll=40.7,-74&client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=C0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=YYYYMMDD
-
-  https://api.foursquare.com/v2/venues/search?ll=40.7,-74&client_id=J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU&client_secret=C0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0&v=YYYYMMDD
-
-
-  Client ID
-  J5JPE0AIVETMYFHEXXYIK4X03DKZLTGP2CTO54QOZ3WWONEU
-
-  Client Secret
-  0BN2MI32GSZLOWER3QK3WQWMQ3JHOYNPHGARSNKEESGL1VN0*/
