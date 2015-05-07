@@ -15,16 +15,6 @@ var viewModel = {
       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.753484,-105.024068&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
 
   },
-  {name: "Crema Coffee House",
-      street: "2862 Larimer St",
-      zip: "80205",
-      city: "Denver",
-      lat: 39.761073,
-      lng: -104.981712,
-      stars: 4.5,
-      show: ko.observable(true),
-      url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.761073,-104.981712&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
-  },
   {name: "Dazbog Coffee",
       street: "1201 E 9th Ave",
       zip: "80218",
@@ -46,14 +36,24 @@ var viewModel = {
       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.762296,-105.035920&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
   },
   {name: "Metropolis Coffee",
-      street: "1 S Broadway",
-      zip: "80223",
+      street: "300 West 11th Avenue",
+      zip: "80204",
       city: "Denver",
-      lat: 39.716444,
-      lng: -104.987704,
+      lat: 39.733677,
+      lng: -104.991923,
       stars: 4.4,
       show: ko.observable(true),
-      url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.716444,-104.987704&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
+      url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.733677,-104.991923&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows",
+  },
+  {name: "Pablo's Cafe",
+    street: "630 E. 6th Ave",
+    zip: "80203",
+    city: "Denver",
+    lat: 39.725458,
+    lng: -104.979014,
+    stars: 4.2,
+    show: ko.observable(true),
+    url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=39.725458,-104.979014&key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows"
   },
   {name: "Peet's Coffe & Tea",
       street: "2500 E 2nd Ave",
@@ -118,12 +118,13 @@ var viewModel = {
   ] //end observableArray
 )
 };
-//global venue variable
+
+
 //ViewModel// what the user sees
 //Google Map//
 var bouncingMarker = null; //global variable setting initial bounce of marker to null--for togglebounce functionality
 
-//function initialize() {
+function initialize() {
 
     var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
     var mapOptions = {
@@ -133,17 +134,17 @@ var bouncingMarker = null; //global variable setting initial bounce of marker to
       //zoom: 12
     }
 
-    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//creates map
+/*    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//creates map
     function initialize() {
       var myLatlng = new google.maps.LatLng(39.73924,-104.99025);
       var mapOptions = {
          zoom: 11,
          center: myLatlng
       }
-
+*/
       var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);//create map
       setMarkers(map, viewModel.locations());
-  };//close initialize function
+      };//close initialize function
 
 
 
@@ -162,18 +163,17 @@ function setMarkers(map, locations){
 
       var venues = "";
       $.ajax({
-      url: fsLink,
-      dataType: "jsonp",
-      success: function(response)
+        url: fsLink,
+        dataType: "jsonp",
+      success: function(response){
+        venues = response.response.venues[0];
+        contents = contents + "Call:" + " " + venues.contact.formattedPhone;
+        },
+      error: function(jqXHR, status, error){
+       contents = contents + "Sorry, we cannot find a phone number for" + " " + location.name +" " + "at this time.";
+     }
+   });//close .ajax
 
-      {
-      //venue = response[1];
-      venues = response.response.venues[0];
-      contents = contents + venues.contact.formattedPhone;
-      //console.log(response.response.venues[0].contact.formattedPhone);
-      }
-
-      }); 
   //infowindow content
 /*
       var contents = '<h3 id="firstHeading" class="firstHeading">' + location.name + '</h1>' +  '<em>' + location.stars  + ' '+ ' ' + 'Stars' + '</em>' + '<h4>' + location.street + ',' +' '+ location.city + ',' +' '+ 'CO' + ' ' + location.zip + '</h4>' + '<a href="' + location.url + '">' + 'Street View </a>'
@@ -199,7 +199,7 @@ function setMarkers(map, locations){
             marker.setAnimation(null)
             }, 3000);
         }
-      };
+      };//close toggleBounce function
     var clickListener = function() { //add clicklistner function to address if marker is bouncing or not
         if(bouncingMarker)
             bouncingMarker.setAnimation(null);
@@ -208,7 +208,7 @@ function setMarkers(map, locations){
             bouncingMarker = this;
         } else
             bouncingMarker = null;
-    }
+    }//close clickListener function
 
           //  marker.content = contents ;//tells the marker which content to display for infowindow
             google.maps.event.addListener(marker, 'click', clickListener); //for togglebounce
@@ -220,12 +220,9 @@ function setMarkers(map, locations){
             }
           })(marker));
 
-    };
-  });
-};
-    //close for loop
-  //close set marker function
-//}//close initialize function
+    };//close if statement in setMarkers function
+  });//close locations.forEach function
+};//close setMarker function
 
 google.maps.event.addDomListener(window, 'load', initialize);
 //function to update locations list and map markers based on selected star value from select box--search functionality
