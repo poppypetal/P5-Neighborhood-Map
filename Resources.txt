@@ -2,6 +2,7 @@ Resources:
 
 //Google Maps API
 https://developers.google.com/maps/documentation/javascript/tutorial
+from https://developers.google.com/maps/documentation/javascript/tutorial
 https://developers.google.com/maps/documentation/javascript/examples/marker-simple
 https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
 https://developers.google.com/maps/documentation/javascript/examples/marker-animations
@@ -9,8 +10,10 @@ http://stackoverflow.com/questions/12727840/google-maps-api-v3-active-marker-onc
 http://stackoverflow.com/questions/18436599/animating-different-markers-api-v3-google-maps
 https://developers.google.com/maps/documentation/streetview/
 http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/
+https://developers.google.com/maps/documentation/javascript/infowindows
 http://stackoverflow.com/questions/8247626/bouncing-marker
 http://stackoverflow.com/questions/14657779/google-maps-bounce-animation-on-marker-for-a-limited-period
+http://stackoverflow.com/questions/11106671/google-maps-api-multiple-markers-with-infowindows
 
 
 //Google Map Longitude/Latitude Coordinate finder
@@ -22,6 +25,13 @@ http://knockoutjs.com/documentation/selectedOptions-binding.html
 https://api.jquery.com/toggle-event/
 
 
+//Foursquare API:
+https://developer.foursquare.com/docs/venues/explore
+https://developer.foursquare.com/docs/explore#req=venues/search%3Fll%3D39.73924,-104.99025%26query%3DRoostercat
+https://foursquare.com/developers/apps
+https://developer.foursquare.com/overview/tutorial
+http://stackoverflow.com/questions/17364091/parse-json-response-using-jquery
+http://api.jquery.com/jquery.ajax/
 https://maps.googleapis.com/maps/api/streetview?size=400x400&location= + 'lat','lng' + &key=AIzaSyCwfGY1D0Uy63zo2_Zex1VfHWF-sVXrows
 
 https://maps.googleapis.com/maps/api/streetview?size=400x400&location= + 'lat','lng' + &key=MyAPIKEY
